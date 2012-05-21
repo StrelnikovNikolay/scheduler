@@ -1,4 +1,8 @@
 progolab
 ========
 
-common project
+Installation: 
+$ pip install flask
+$ pip install sqlalchemy 
+$ pip install flask-sqlalchemy
+
