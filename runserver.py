@@ -1,2 +1,6 @@
 from scheduler import app
-app.run(debug = True)
+"""
+    runs test server.
+"""
+if __name__=="__main__":
+    app.run(debug = True)
