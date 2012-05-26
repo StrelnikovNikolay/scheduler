@@ -7,6 +7,9 @@ url = app.add_url_rule
 from flask.ext.sqlalchemy import SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy(app)
+#show the queries, which are build behind the scenes
+db.engine.echo = True
 
-#boilerplate ini code
+#ini code
 import scheduler.urls
+import scheduler.models
