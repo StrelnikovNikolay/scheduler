@@ -37,7 +37,7 @@ class TreeCategory(ManagedElement):
     def __repr__(self):
         return "<TreeCategory %r>" % self.tree_category_id
 
-# 1 To Many relationship from TreeCategories to TreeItems
+# Many To Many relationship from TreeCategories to TreeItems
 tree_items_to_tree_categories = db.Table(
     "tree_items_to_tree_categories",
     db.Column("category_id", db.Integer, db.ForeignKey("tree_category.tree_category_id")),
@@ -61,7 +61,7 @@ class TreeItem(ManagedElement):
         self.categories.extend(categories)
 
     parent_id = db.Column(db.Integer, db.ForeignKey("tree_category.tree_category_id"))
-    ##binding to TreeCategory
+    #binding to TreeCategory
     categories = db.relationship("TreeCategory", secondary = tree_items_to_tree_categories, 
                                  backref = db.backref("items")) 
                                 
