@@ -55,8 +55,10 @@ class TreeItem(ManagedElement):
         """
             categories - iterable of TreeCategory
         """
-        if categories:
-            self.categories.extend(categories)
+        if not categories:
+            raise Exception("Can't create TreeItem without TreeCategories")
+
+        self.categories.extend(categories)
 
     parent_id = db.Column(db.Integer, db.ForeignKey("tree_category.tree_category_id"))
     ##binding to TreeCategory
