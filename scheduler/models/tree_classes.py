@@ -23,10 +23,9 @@ class TreeCategory(ManagedElement):
     #Get out of my way Tree implementation : adjacency list
     #TODO: replace with something more conscious
     parent_id = db.Column(db.Integer, db.ForeignKey('tree_category.tree_category_id'))
-    children = db.relationship("TreeCategory", 
-        backref =  db.backref(
-            "parent", remote_side = [tree_category_id]
-        ), primaryjoin=parent_id==tree_category_id)
+    children = db.relationship("TreeCategory", backref =  db.backref(
+                               "parent", remote_side = [tree_category_id]),
+                                primaryjoin=parent_id==tree_category_id)
     
     def __init__(self, parent = None, children = None):
         #some sugar... 
@@ -45,7 +44,6 @@ tree_items_to_tree_categories = db.Table(
     db.Column("item_id", db.Integer, db.ForeignKey("tree_item.tree_item_id"))
 )
 
-
 class TreeItem(ManagedElement):
     """
         Base class for items, to be ordered
@@ -53,15 +51,17 @@ class TreeItem(ManagedElement):
     __mapper_args__ = {"polymorphic_identity" : "tree_item"}
     tree_item_id = db.Column(db.Integer, db.ForeignKey("managed_element.id"), primary_key = True)
 
-    def __init__(self, **kwargs):
+    def __init__(self, categories = None):
         """
-            parents - iterable of TreeCategory
+            categories - iterable of TreeCategory
         """
-        if "parents" in kwargs.keys():
-            self.categories.extend(kwargs["parents"])
+        if categories:
+            self.categories.extend(categories)
 
-    #binding to TreeCategory
-    categories = db.relationship("TreeCategory", secondary = tree_items_to_tree_categories)
-
+    parent_id = db.Column(db.Integer, db.ForeignKey("tree_category.tree_category_id"))
+    ##binding to TreeCategory
+    categories = db.relationship("TreeCategory", secondary = tree_items_to_tree_categories, 
+                                 backref = db.backref("items")) 
+                                
     def __repr__(self):
         return "<TreeItem %r>" % self.tree_item_id
